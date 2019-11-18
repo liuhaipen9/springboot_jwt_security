@@ -18,13 +18,14 @@ import org.springframework.stereotype.Component;
 public class MyAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private UserDetailsService userDetailsService;
+
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String username=authentication.getName();
-        String password=(String) authentication.getCredentials();
-        UserDetails user=userDetailsService.loadUserByUsername(username);
-        if (user.getPassword().equals(password)){
-            return new UsernamePasswordAuthenticationToken(user,null,user.getAuthorities());
+        String username = authentication.getName();
+        String password = (String) authentication.getCredentials();
+        UserDetails user = userDetailsService.loadUserByUsername(username);
+        if (user.getPassword().equals(password)) {
+            return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         }
 
         return null;

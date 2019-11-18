@@ -46,39 +46,41 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String header=request.getHeader("Authorization");
+        /*String header=request.getHeader("Authorization");
         if (header==null||!header.startsWith("Bearer ")){
             chain.doFilter(request,response);
             return;
-        }
-        UsernamePasswordAuthenticationToken authenticationToken=getAuthentication(request);
+        }*/
+        UsernamePasswordAuthenticationToken authenticationToken = getAuthentication(request);
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        chain.doFilter(request,response);
+        chain.doFilter(request, response);
     }
 
 
-    private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request){
-        String token=request.getHeader("Authorization");
+    private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
         if (token!=null){
             Claims claims= Jwts.parser().setSigningKey("MyJwtSecretll")
                     .parseClaimsJws(token.replace("Bearer ","")).getBody();
             String user=claims.getSubject();
             List<String> roles=claims.get("role",List.class);
             //为什么chaims里面没有role对应的值
-            /*List<SimpleGrantedAuthority> auth=roles.stream().map(s->new
-                    SimpleGrantedAuthority(s)).collect(Collectors.toList());*/
-            List<SimpleGrantedAuthority> auth=Arrays.asList(new
-                    SimpleGrantedAuthority("ROLE_ADMIN"));
+//            List<SimpleGrantedAuthority> auth=roles.stream().map(s->new
+//                    SimpleGrantedAuthority(s)).collect(Collectors.toList());
+            //拿到username，可以根据username去数据库里面把role查询出来
+            List<SimpleGrantedAuthority> auth2=Arrays.asList(new
+                    SimpleGrantedAuthority("ROLE_USER"));
             if (user!=null){
-               return new UsernamePasswordAuthenticationToken(user,null,auth);
+                return new UsernamePasswordAuthenticationToken(user,null,auth2);
             }
             return null;
         }
+//        String user = "roc-liu";
+//        List<SimpleGrantedAuthority> auth = Arrays.asList(new
+//                SimpleGrantedAuthority("ROLE_USER"));
+//        return new UsernamePasswordAuthenticationToken(user, null, auth);
         return null;
     }
-
-
-
 
 
     @Override
@@ -170,7 +172,6 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
     protected boolean shouldNotFilterErrorDispatch() {
         return super.shouldNotFilterErrorDispatch();
     }
-
 
 
     @Override

@@ -28,9 +28,10 @@ import java.util.Collection;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
-   @Autowired
-   private MyAuthenticationProvider myAuthenticationProvider;
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private MyAuthenticationProvider myAuthenticationProvider;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(myAuthenticationProvider);
@@ -40,25 +41,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-       http.authorizeRequests().anyRequest().authenticated()
-               .and()
-               .formLogin().loginProcessingUrl("/login")
-               .and()
-               .csrf().disable()
-               .addFilter(new JWTLoginFilter(authenticationManager()))
-               .addFilter(new JWTAuthenticationFilter(authenticationManager()));
+        http.authorizeRequests().anyRequest().authenticated()
+                .and()
+                .formLogin().loginProcessingUrl("/login")
+                .and()
+                .csrf().disable()
+                .addFilter(new JWTLoginFilter(authenticationManager()))
+                .addFilter(new JWTAuthenticationFilter(authenticationManager()));
         super.configure(http);
     }
+
     @Bean
-    public PasswordEncoder mypasswordEncoder(){
+    public PasswordEncoder mypasswordEncoder() {
         return new MyPasswordEncoder();
     }
+
     @Bean
-    public UserDetailsService userDetailsService(){
-        InMemoryUserDetailsManager iud=new InMemoryUserDetailsManager();
-        Collection<GrantedAuthority> admintAuth=new ArrayList<>();
-        ((ArrayList<GrantedAuthority>) admintAuth).add(new SimpleGrantedAuthority(("ROLE_ADMIN")));
-        iud.createUser(new User("zhangsan","123456",admintAuth));
+    public UserDetailsService userDetailsService() {
+        InMemoryUserDetailsManager iud = new InMemoryUserDetailsManager();
+        Collection<GrantedAuthority> admintAuth = new ArrayList<>();
+        ((ArrayList<GrantedAuthority>) admintAuth).add(new SimpleGrantedAuthority(("ROLE_USER")));
+        iud.createUser(new User("roc-liu", "123456", admintAuth));
         return iud;
     }
 }

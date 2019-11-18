@@ -12,19 +12,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
     @RequestMapping("/hello")
-    public String hello(){
+    public String hello() {
         return "hello";
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @RequestMapping("/test")
-    public String test(){
+    public String test() {
         return "test";
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     @RequestMapping("/test2")
-    public String test2(){
+    public String test2() {
         return "test2";
     }
+
 }

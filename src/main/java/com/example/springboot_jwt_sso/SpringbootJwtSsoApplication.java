@@ -8,8 +8,8 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = {"com.example.springboot_jwt_sso.*"})
 public class SpringbootJwtSsoApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SpringbootJwtSsoApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SpringbootJwtSsoApplication.class, args);
+    }
 
 }
