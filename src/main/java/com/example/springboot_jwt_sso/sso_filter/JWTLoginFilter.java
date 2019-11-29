@@ -45,7 +45,7 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
         Claims claims = Jwts.claims();
         claims.put("role", authResult.getAuthorities().stream().map(s -> ((GrantedAuthority) s).getAuthority()).collect(Collectors.toList()));
         String token = Jwts.builder().setSubject(authResult.getName())
-                .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 24 * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + 60*1000))
                 .signWith(SignatureAlgorithm.HS512, "MyJwtSecretll").compact();
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;charset-utf-8");
